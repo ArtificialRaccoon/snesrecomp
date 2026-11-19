@@ -3576,7 +3576,7 @@ int snesrecomp_desktop_main(const SnesDesktopHostGame *game, int argc, char **ar
   /* Before the launcher, which needs the provider to show the Mods page.
    * The catalog is mods/preloaded beside the executable, staged by the build;
    * an empty one is valid. */
-  if (game->game_id && game->game_id[0]) {
+  if (game->game_id && game->game_id[0] && !getenv("SNESRECOMP_NO_MODS")) {
     char mods_dir[1024];
     if (config_file) snprintf(mods_dir, sizeof(mods_dir), SNES_MOD_CATALOG_ROOT);
     if (config_file || snesrecomp_exe_dir_path(SNES_MOD_CATALOG_ROOT, mods_dir, sizeof(mods_dir))) {

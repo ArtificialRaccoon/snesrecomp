@@ -278,6 +278,9 @@ int interp_bridge_resume_task(CpuState *cpu, uint32_t resume_pc24,
  * of the body interior. */
 extern void (*g_interp_bridge_pc_hook)(uint32_t pc24, int m_flag, int x_flag);
 extern void (*g_interp_bridge_bounce_hook)(uint32_t pc24, int m_flag, int x_flag);
+struct Interp816;
+typedef int (*Interp816OverrideHook)(struct Interp816 *cpu, uint32_t pc24);
+extern Interp816OverrideHook g_interp_bridge_override_hook;
 
 long interp_tier_hit_count(void);
 void interp_tier2_stats(int *sites, unsigned long long *clean,

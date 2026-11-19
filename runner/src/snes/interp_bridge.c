@@ -717,6 +717,7 @@ unsigned long long g_interp_bridge_steps = 0;
  * separately and join them by key instead. */
 void (*g_interp_bridge_pc_hook)(uint32_t pc24, int m_flag, int x_flag) = 0;
 void (*g_interp_bridge_bounce_hook)(uint32_t pc24, int m_flag, int x_flag) = 0;
+Interp816OverrideHook g_interp_bridge_override_hook = 0;
 /* Architectural stack boundary of the currently active interpreter frame.
  * A rewritten AOT return that has already popped above this boundary belongs
  * to a compiled ancestor, not to this interpreter's guest call chain. */
@@ -1807,6 +1808,9 @@ static int _interp_run_core(CpuState *cpu, uint32_t entry_pc24,
     }
     for (; steps < step_cap; steps++) {
         RtlGuestScopeCheckpoint();
+        if (g_interp_bridge_override_hook) {
+            g_interp_bridge_override_hook(&in, (((uint32_t)in.k << 16) | in.pc) & 0xFFFFFFu);
+        }
         const uint32_t pc_before = ((uint32_t)in.k << 16) | in.pc;
         /* Settle the DRAM refresh tax owed by clocks generated code charged
          * after its last per-block settlement: the interpreter settles after
